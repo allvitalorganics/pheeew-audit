@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pheeew — Competitive Intelligence & Launch Readiness Audit</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#0a0a0a;color:#fff;line-height:1.8;padding:0}
+.wrap{max-width:1080px;margin:0 auto;padding:16px 24px 80px}
+h1{font-size:22px;font-weight:800;margin-bottom:2px}
+h2{font-size:14px;font-weight:700;margin:24px 0 8px;padding:8px 14px;border-radius:6px;background:#1a1a1a;border-left:3px solid #DAFF00}
+h3{font-size:11px;font-weight:700;color:#DAFF00;margin:10px 0 3px;text-transform:uppercase;letter-spacing:1px}
+h4{font-size:11px;font-weight:700;color:#fff;margin:6px 0 2px}
+p,li{color:#999;font-size:11px;margin:2px 0}
+ul{padding-left:14px}
+strong{color:#fff}
+em{color:#DAFF00;font-style:normal;font-weight:600}
+a{color:#DAFF00;text-decoration:none;font-size:9px}
+a:hover{text-decoration:underline}
+.sub{font-size:9px;color:#444;margin-bottom:10px}
+.S{background:#1a1a1a;border:1px solid #222;border-radius:6px;padding:12px;margin:5px 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+.g5{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:6px}
+@media(max-width:700px){.g2,.g3,.g4,.g5{grid-template-columns:1fr}}
+.card{background:#111;border:1px solid #222;border-radius:6px;padding:10px}
+.stat{text-align:center;padding:8px}
+.stat .n{font-size:20px;font-weight:800}
+.stat .l{font-size:7px;color:#666;letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.lime{color:#DAFF00}.red{color:#c0392b}.green{color:#27ae60}.yel{color:#e67e22}.org{color:#FF6B35}
+.ok{background:rgba(39,174,96,.08);border-left:3px solid #27ae60;padding:6px 10px;margin:3px 0;font-size:10px;color:#27ae60;border-radius:0 4px 4px 0}
+.no{background:rgba(192,57,43,.06);border-left:3px solid #c0392b;padding:6px 10px;margin:3px 0;font-size:10px;color:#c0392b;border-radius:0 4px 4px 0}
+.warn{background:rgba(230,126,34,.06);border-left:3px solid #e67e22;padding:6px 10px;margin:3px 0;font-size:10px;color:#e67e22;border-radius:0 4px 4px 0}
+.ip{background:rgba(52,152,219,.06);border-left:3px solid #3498db;padding:6px 10px;margin:3px 0;font-size:10px;color:#3498db;border-radius:0 4px 4px 0}
+.diamond{background:#0d1a0a;border:2px solid #DAFF00;border-radius:8px;padding:14px;margin:8px 0}
+table{width:100%;border-collapse:collapse;font-size:10px;margin:6px 0}
+th{text-align:left;padding:5px 6px;background:#111;color:#555;font-size:8px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #333}
+td{padding:5px 6px;border-bottom:1px solid #151515;color:#888}
+.tabs{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.97);backdrop-filter:blur(12px);border-bottom:1px solid #222;padding:8px 16px;display:flex;gap:3px;flex-wrap:wrap;align-items:center}
+.tab{padding:5px 11px;border-radius:100px;font-size:9px;font-weight:700;cursor:pointer;border:1px solid #333;color:#555;transition:.12s;letter-spacing:.2px;text-transform:uppercase}
+.tab:hover{border-color:#DAFF00;color:#fff}
+.tab.on{background:#DAFF00;color:#0a0a0a;border-color:#DAFF00}
+.pg{display:none}.pg.a{display:block}
+.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:8px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-right:2px}
+.tag-done{background:#2d6a4f;color:#fff}
+.tag-ip{background:#3a5a8c;color:#fff}
+.tag-ns{background:#6b3a3a;color:#fff}
+.tag-crit{background:#c0392b;color:#fff}
+.score-bar{height:6px;border-radius:3px;background:#222;margin:4px 0}
+.score-fill{height:100%;border-radius:3px}
+.brand-logo{font-size:9px;color:#444;font-style:italic}
+.filter-row{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+.filter-btn{padding:3px 8px;border-radius:100px;font-size:8px;font-weight:600;cursor:pointer;border:1px solid #333;color:#555;background:transparent;transition:.12s}
+.filter-btn:hover,.filter-btn.active{border-color:#DAFF00;color:#DAFF00}
+.comp-card{background:#111;border:1px solid #222;border-radius:6px;padding:12px;margin:5px 0;transition:.15s}
+.comp-card:hover{border-color:#333}
+.comp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.comp-name{font-size:12px;font-weight:700;color:#fff}
+.comp-score{font-size:11px;font-weight:800;padding:2px 8px;border-radius:4px}
+.score-high{background:#DAFF00;color:#0a0a0a}
+.score-med{background:#e67e22;color:#fff}
+.score-low{background:#333;color:#888}
+.comp-meta{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px;font-size:9px}
+.comp-meta .label{color:#555;font-size:7px;text-transform:uppercase;letter-spacing:.5px}
+.comp-meta .value{color:#999}
+.audit-item{background:#111;border:1px solid #1a1a1a;border-radius:4px;padding:8px 10px;margin:3px 0;display:grid;grid-template-columns:24px 1fr 60px;gap:6px;align-items:start;font-size:10px}
+.audit-num{color:#DAFF00;font-weight:700;font-size:9px}
+.audit-status{text-align:right;font-size:8px;font-weight:600;letter-spacing:.3px}
+.st-done{color:#27ae60}.st-ip{color:#3498db}.st-ns{color:#c0392b}.st-na{color:#444}
+.section-score{display:inline-block;background:#111;border:1px solid #333;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;margin-left:6px}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #1a1a1a}
+.topbar-brand{font-size:10px;font-weight:800;letter-spacing:2px;color:#DAFF00;text-transform:uppercase}
+.topbar-date{font-size:8px;color:#444}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<div class="topbar-brand">Pheeew</div>
+<div class="topbar-date">Competitive Intelligence & Launch Readiness Audit -- April 13, 2026</div>
+</div>
+
+<div class="tabs">
+<div class="tab on" onclick="show('overview')">Overview</div>
+<div class="tab" onclick="show('compdb')">Comp DB</div>
+<div class="tab" onclick="show('matrix')">Matrix</div>
+<div class="tab" onclick="show('audit')">Launch Audit</div>
+<div class="tab" onclick="show('legal')">1. Legal</div>
+<div class="tab" onclick="show('mfg')">2. Mfg</div>
+<div class="tab" onclick="show('tech')">3. Tech</div>
+<div class="tab" onclick="show('finance')">4. Finance</div>
+<div class="tab" onclick="show('product')">5. Product</div>
+<div class="tab" onclick="show('marketing')">6. Marketing</div>
+<div class="tab" onclick="show('sales')">7. Sales</div>
+<div class="tab" onclick="show('ops')">8. Ops</div>
+<div class="tab" onclick="show('team')">9. Team</div>
+<div class="tab" onclick="show('invest')">10. Invest</div>
+</div>
+
+<div class="wrap">
+
+<!-- ============================================================ -->
+<!-- OVERVIEW -->
+<!-- ============================================================ -->
+<div class="pg a" id="overview">
+<h1>Two Deliverables, One File</h1>
+<div class="sub">Competitive Intelligence Database (25+ brands) + Launch Readiness Audit (100+ items across 10 areas)</div>
+
+<div class="g2">
+<div class="card">
+<h3>Deliverable 1: Competitive Intelligence</h3>
+<div class="stat"><div class="n lime">28</div><div class="l">Brands Profiled</div></div>
+<p style="margin-top:6px">12 data points per brand: Name, Website, IG, Product Type, Core Promise, Price Tier, Age, Gender, Mindset, Behavior, Notes, Relevance Score. Covers prebiotic sodas, probiotic drinks, kombucha, kefir, cold-pressed juice, functional smoothies, meal replacements, yogurt, and Korean functional beverages.</p>
+</div>
+<div class="card">
+<h3>Deliverable 2: Launch Readiness Audit</h3>
+<div class="stat"><div class="n lime">127</div><div class="l">Audit Items</div></div>
+<p style="margin-top:6px">Scored across 10 operational areas. Each item tagged DONE / IN PROGRESS / NOT STARTED. Critical gaps flagged. This is a FOOD brand audit (not supplement) -- no DSHEA, no S/F notification, Nutrition Facts panel, FDA food facility registration, 21 CFR 101 labeling.</p>
+</div>
+</div>
+
+<div class="diamond" style="margin-top:12px">
+<h3>Composite Scores</h3>
+<div class="g5" style="margin-top:6px">
+<div class="stat"><div class="n green">7</div><div class="l">Legal</div></div>
+<div class="stat"><div class="n yel">4</div><div class="l">Manufacturing</div></div>
+<div class="stat"><div class="n yel">5</div><div class="l">Tech</div></div>
+<div class="stat"><div class="n green">6</div><div class="l">Finance</div></div>
+<div class="stat"><div class="n yel">5</div><div class="l">Product</div></div>
+<div class="stat"><div class="n yel">4</div><div class="l">Marketing</div></div>
+<div class="stat"><div class="n red">3</div><div class="l">Sales</div></div>
+<div class="stat"><div class="n red">3</div><div class="l">Ops</div></div>
+<div class="stat"><div class="n green">7</div><div class="l">Team/HR</div></div>
+<div class="stat"><div class="n yel">4</div><div class="l">Investment</div></div>
+</div>
+<p style="margin-top:8px;font-size:10px;color:#ccc"><strong style="color:#DAFF00">Overall Launch Readiness: 4.8 / 10</strong> -- Entity formed, founder agreements done, formulation locked. Critical gaps: no manufacturer contract signed, no FDA food facility registration, no Nutrition Facts panel, no process authority letter, no fulfillment setup. 6-8 months of execution needed before launch.</p>
+</div>
+
+<div class="S" style="margin-top:10px">
+<h3>Top 5 Critical Gaps (Block Launch)</h3>
+<div class="no">1. No manufacturing contract signed -- COSMAX or alternative not finalized. 120K minimum per SKU = $150K+ commitment. Must happen ASAP.</div>
+<div class="no">2. No process authority letter / thermal processing validation for shelf-stable pouch. FDA requires this for low-acid/acidified foods.</div>
+<div class="no">3. No FDA food facility registration (21 CFR 1.225). Required BEFORE manufacturing begins. Both US importer and Korean manufacturer need registration.</div>
+<div class="no">4. No Nutrition Facts panel designed or verified. Requires lab analysis (proximate analysis) of final production formula. Not Supplement Facts.</div>
+<div class="no">5. No fulfillment / 3PL partner selected for US distribution. Shelf-stable pouches need ambient warehousing but still need logistics.</div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DELIVERABLE 1: COMPETITIVE INTELLIGENCE DATABASE -->
+<!-- ============================================================ -->
+<div class="pg" id="compdb">
+<h1>Competitive Intelligence Database</h1>
+<div class="sub">28 food & beverage brands -- 12 data points each -- scored 1-10 on relevance to Pheeew</div>
+
+<div class="filter-row">
+<button class="filter-btn active" onclick="filterComp('all')">All (28)</button>
+<button class="filter-btn" onclick="filterComp('prebiotic-soda')">Prebiotic Soda</button>
+<button class="filter-btn" onclick="filterComp('probiotic-drink')">Probiotic Drink</button>
+<button class="filter-btn" onclick="filterComp('kombucha')">Kombucha</button>
+<button class="filter-btn" onclick="filterComp('juice')">Juice / Smoothie</button>
+<button class="filter-btn" onclick="filterComp('yogurt')">Yogurt / Kefir</button>
+<button class="filter-btn" onclick="filterComp('meal-replace')">Meal Replacement</button>
+<button class="filter-btn" onclick="filterComp('korean')">Korean</button>
+<button class="filter-btn" onclick="filterComp('adjacent')">Adjacent</button>
+</div>
+
+<!-- OLIPOP -->
+<div class="comp-card" data-cat="prebiotic-soda">
+<div class="comp-header">
+<div class="comp-name">1. OLIPOP</div>
+<div class="comp-score score-high">8</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">drinkolipop.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@drinkolipop (863K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Prebiotic soda, 12oz can</div></div>
+<div><div class="label">Core Promise</div><div class="value">Better-for-you soda with 9g fiber (OliSmart blend)</div></div>
+<div><div class="label">Price Tier</div><div class="value">$2.49-2.99/can retail</div></div>
+<div><div class="label">Age Range</div><div class="value">22-45</div></div>
+<div><div class="label">Gender</div><div class="value">Skews female 60/40</div></div>
+<div><div class="label">Mindset</div><div class="value">Soda replacement guilt relief; casual wellness</div></div>
+<div><div class="label">Behavior</div><div class="value">Grocery impulse buy; social media discovery; 50K+ retail doors</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $400M revenue. $1.85B valuation. 60% prebiotic soda market share. Prebiotic ONLY (no probiotics). $50M+ funding. Proves the gut health beverage category but positioned as soda replacement, not functional health. Different format, different occasion, but validates consumer demand for prebiotic fiber in drinks.</p>
+</div>
+
+<!-- Poppi -->
+<div class="comp-card" data-cat="prebiotic-soda">
+<div class="comp-header">
+<div class="comp-name">2. Poppi</div>
+<div class="comp-score score-high">8</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">drinkpoppi.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@drinkpoppi (1.2M)</div></div>
+<div><div class="label">Product Type</div><div class="value">Prebiotic soda, 12oz can</div></div>
+<div><div class="label">Core Promise</div><div class="value">Fun prebiotic soda with ACV</div></div>
+<div><div class="label">Price Tier</div><div class="value">$2.49-2.99/can retail</div></div>
+<div><div class="label">Age Range</div><div class="value">18-35</div></div>
+<div><div class="label">Gender</div><div class="value">Skews female 65/35</div></div>
+<div><div class="label">Mindset</div><div class="value">Trendy wellness; social-first; wants cool + healthy</div></div>
+<div><div class="label">Behavior</div><div class="value">TikTok discovery; convenience store / grocery; impulse buy</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $500M revenue. Acquired by PepsiCo for $1.95B. Only 2g prebiotic (ACV-based -- minimal functional benefit). Hit with $8.9M class action lawsuit for misleading gut health claims. Cautionary tale: proves market demand but also shows risk of overclaiming. Marketing machine, weak on science.</p>
+</div>
+
+<!-- GoodBelly -->
+<div class="comp-card" data-cat="probiotic-drink">
+<div class="comp-header">
+<div class="comp-name">3. GoodBelly</div>
+<div class="comp-score score-high">9</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">goodbelly.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@goodbelly (39K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Probiotic juice shots & cartons</div></div>
+<div><div class="label">Core Promise</div><div class="value">Probiotic juice for daily gut health</div></div>
+<div><div class="label">Price Tier</div><div class="value">$3-5/4-pack shots</div></div>
+<div><div class="label">Age Range</div><div class="value">30-55</div></div>
+<div><div class="label">Gender</div><div class="value">Female 70/30</div></div>
+<div><div class="label">Mindset</div><div class="value">Health-conscious parent; proactive gut health</div></div>
+<div><div class="label">Behavior</div><div class="value">Natural grocery shopper; Whole Foods / Sprouts; routine buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Revenue crashed from $25M to $6.7M. $45.7M total funding burned. IS a synbiotic (3g fiber + 1B LP299V CFU) but NEVER uses the word "synbiotic." Dying brand = proves the concept but shows failure mode of not differentiating. Pheeew can learn from their mistakes: own the synbiotic term, build community, don't rely on retail alone.</p>
+</div>
+
+<!-- Yakult -->
+<div class="comp-card" data-cat="probiotic-drink">
+<div class="comp-header">
+<div class="comp-name">4. Yakult</div>
+<div class="comp-score score-high">9</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">yakultusa.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@yakultusa (various regional)</div></div>
+<div><div class="label">Product Type</div><div class="value">Probiotic dairy drink, 65mL bottle</div></div>
+<div><div class="label">Core Promise</div><div class="value">Daily probiotic for gut health (L. casei Shirota)</div></div>
+<div><div class="label">Price Tier</div><div class="value">$0.50-1.00/bottle</div></div>
+<div><div class="label">Age Range</div><div class="value">All ages (mass market)</div></div>
+<div><div class="label">Gender</div><div class="value">Even split</div></div>
+<div><div class="label">Mindset</div><div class="value">Habitual health; trust in science; daily ritual</div></div>
+<div><div class="label">Behavior</div><div class="value">Grocery routine buy; multi-pack; family consumption; Asian diaspora loyalty</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $3.25B global revenue. 8.5% global probiotic market share. 34.5% Japan. Format comp: small single-serve daily dose. Probiotic only (no prebiotic). Contains dairy + added sugar. Pheeew is the vegan, sugar-free, synbiotic evolution of Yakult's model. The "next-gen Yakult" pitch resonates with investors.</p>
+</div>
+
+<!-- Lifeway Kefir -->
+<div class="comp-card" data-cat="yogurt">
+<div class="comp-header">
+<div class="comp-name">5. Lifeway Kefir</div>
+<div class="comp-score score-med">6</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">lifewaykefir.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@lifewaykefir (85K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Kefir drinks, cultured dairy</div></div>
+<div><div class="label">Core Promise</div><div class="value">12 live probiotic cultures in drinkable kefir</div></div>
+<div><div class="label">Price Tier</div><div class="value">$4-6/32oz bottle</div></div>
+<div><div class="label">Age Range</div><div class="value">28-55</div></div>
+<div><div class="label">Gender</div><div class="value">Female 65/35</div></div>
+<div><div class="label">Mindset</div><div class="value">Natural/fermented food believer; gut health via tradition</div></div>
+<div><div class="label">Behavior</div><div class="value">Regular grocery; health food store; smoothie ingredient buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Public company (LWAY). ~$175M revenue. Probiotic only, dairy-based. Pheeew differentiates as vegan, shelf-stable, synbiotic. Kefir requires refrigeration. Different consumption occasion but same gut health motivation.</p>
+</div>
+
+<!-- Daily Harvest -->
+<div class="comp-card" data-cat="juice">
+<div class="comp-header">
+<div class="comp-name">6. Daily Harvest</div>
+<div class="comp-score score-med">7</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">daily-harvest.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@dailyharvest (640K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Frozen functional smoothies, bowls, meals</div></div>
+<div><div class="label">Core Promise</div><div class="value">Clean, plant-based functional food delivered to your door</div></div>
+<div><div class="label">Price Tier</div><div class="value">$7-9/item</div></div>
+<div><div class="label">Age Range</div><div class="value">25-40</div></div>
+<div><div class="label">Gender</div><div class="value">Female 75/25</div></div>
+<div><div class="label">Mindset</div><div class="value">Convenience + nutrition; time-poor health-conscious</div></div>
+<div><div class="label">Behavior</div><div class="value">DTC subscription; meal prep replacement; Instagram lifestyle</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $250M+ peak revenue. DTC subscription model similar to Pheeew's sub model. Smoothie format overlap. Had a major recall (tara flour contamination 2022) -- cautionary tale on ingredient sourcing. Frozen = cold chain costs. Pheeew's shelf-stable advantage is significant for logistics and margin.</p>
+</div>
+
+<!-- Splendid Spoon -->
+<div class="comp-card" data-cat="juice">
+<div class="comp-header">
+<div class="comp-name">7. Splendid Spoon</div>
+<div class="comp-score score-med">6</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">splendidspoon.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@splendidspoon (145K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Plant-based smoothies, soups, bowls</div></div>
+<div><div class="label">Core Promise</div><div class="value">Plant-powered meals and smoothies for wellness reset</div></div>
+<div><div class="label">Price Tier</div><div class="value">$9-13/item</div></div>
+<div><div class="label">Age Range</div><div class="value">28-42</div></div>
+<div><div class="label">Gender</div><div class="value">Female 80/20</div></div>
+<div><div class="label">Mindset</div><div class="value">Clean eating; gut-friendly; reset mentality</div></div>
+<div><div class="label">Behavior</div><div class="value">DTC subscription; wellness reset / cleanse buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Niche DTC player. Smoothie format comp. High price point, small addressable base. Requires freezer storage. Proves premium plant-based smoothie subscription works but at limited scale. Pheeew's lower price and shelf-stable format expand the addressable market.</p>
+</div>
+
+<!-- Pressed Juicery -->
+<div class="comp-card" data-cat="juice">
+<div class="comp-header">
+<div class="comp-name">8. Pressed Juicery</div>
+<div class="comp-score score-med">5</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">pressedjuicery.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@pressedjuicery (565K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Cold-pressed juice, shots, freezes</div></div>
+<div><div class="label">Core Promise</div><div class="value">Accessible cold-pressed juice for daily nutrition</div></div>
+<div><div class="label">Price Tier</div><div class="value">$5-8/bottle retail</div></div>
+<div><div class="label">Age Range</div><div class="value">22-40</div></div>
+<div><div class="label">Gender</div><div class="value">Female 70/30</div></div>
+<div><div class="label">Mindset</div><div class="value">Premium wellness; visual health signaling; LA lifestyle</div></div>
+<div><div class="label">Behavior</div><div class="value">Retail store + grocery; juice cleanse buyer; grab-and-go</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> 100+ retail stores. Cold chain dependent. No prebiotic/probiotic positioning. Primarily a juice brand, not functional gut health. Lower relevance but competes for the same "healthy drink" wallet share and grocery shelf space.</p>
+</div>
+
+<!-- Suja Juice -->
+<div class="comp-card" data-cat="juice">
+<div class="comp-header">
+<div class="comp-name">9. Suja Juice</div>
+<div class="comp-score score-med">7</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">sujajuice.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@lovesuja (521K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Organic cold-pressed juice, shots, functional drinks</div></div>
+<div><div class="label">Core Promise</div><div class="value">Organic, functional cold-pressed juice</div></div>
+<div><div class="label">Price Tier</div><div class="value">$4-8/bottle</div></div>
+<div><div class="label">Age Range</div><div class="value">25-45</div></div>
+<div><div class="label">Gender</div><div class="value">Female 65/35</div></div>
+<div><div class="label">Mindset</div><div class="value">Organic purist; ingredient transparency; functional wellness</div></div>
+<div><div class="label">Behavior</div><div class="value">Whole Foods / natural grocery; IPO-track brand awareness; cleanse buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $326M revenue. Filing for IPO April 2026 at ~$1B valuation target. $207M funding. Owns Slice (prebiotic soda sub-brand claiming pre+pro+post but zero transparency). Suja's shot line competes directly on occasion (daily functional shot). Refrigerated, not shelf-stable. Watch the IPO for category validation signals.</p>
+</div>
+
+<!-- Harmless Harvest -->
+<div class="comp-card" data-cat="juice">
+<div class="comp-header">
+<div class="comp-name">10. Harmless Harvest</div>
+<div class="comp-score score-low">4</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">harmlessharvest.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@harmlessharvest (263K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Coconut water, functional coconut-based beverages</div></div>
+<div><div class="label">Core Promise</div><div class="value">Sustainable, premium coconut-based hydration</div></div>
+<div><div class="label">Price Tier</div><div class="value">$4-6/bottle</div></div>
+<div><div class="label">Age Range</div><div class="value">25-40</div></div>
+<div><div class="label">Gender</div><div class="value">Even split</div></div>
+<div><div class="label">Mindset</div><div class="value">Sustainability-first; premium naturals; ethical consumption</div></div>
+<div><div class="label">Behavior</div><div class="value">Premium grocery; post-workout / hydration occasion</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> ~$100M revenue. Danone invested then divested. No gut health positioning. Lower relevance but competes in premium functional beverage space. Brand storytelling (sustainability, Thailand sourcing) is a model for how Pheeew could tell the Korea manufacturing story.</p>
+</div>
+
+<!-- GT's Kombucha -->
+<div class="comp-card" data-cat="kombucha">
+<div class="comp-header">
+<div class="comp-name">11. GT's Kombucha</div>
+<div class="comp-score score-med">7</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">gtslivingfoods.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@gtskombucha (230K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Kombucha, fermented beverages</div></div>
+<div><div class="label">Core Promise</div><div class="value">Raw, organic kombucha with live cultures</div></div>
+<div><div class="label">Price Tier</div><div class="value">$3-5/16oz bottle</div></div>
+<div><div class="label">Age Range</div><div class="value">25-50</div></div>
+<div><div class="label">Gender</div><div class="value">Female 60/40</div></div>
+<div><div class="label">Mindset</div><div class="value">Fermented food believer; gut health OG; natural lifestyle</div></div>
+<div><div class="label">Behavior</div><div class="value">Grocery routine; health food store loyalist; daily ritual drinker</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $275M revenue. 40% US kombucha market share. 100% founder-owned. $900M+ valuation. Probiotic only (live cultures, unpredictable CFU count). Requires refrigeration. GT proved the "gut health drink as daily ritual" concept at scale. Pheeew can position as the modern, precise, shelf-stable evolution.</p>
+</div>
+
+<!-- Health-Ade -->
+<div class="comp-card" data-cat="kombucha">
+<div class="comp-header">
+<div class="comp-name">12. Health-Ade Kombucha</div>
+<div class="comp-score score-med">6</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">health-ade.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@healthade (291K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Kombucha</div></div>
+<div><div class="label">Core Promise</div><div class="value">Follow your gut -- premium kombucha</div></div>
+<div><div class="label">Price Tier</div><div class="value">$4-5/16oz bottle</div></div>
+<div><div class="label">Age Range</div><div class="value">25-45</div></div>
+<div><div class="label">Gender</div><div class="value">Female 65/35</div></div>
+<div><div class="label">Mindset</div><div class="value">Premium wellness; gut-conscious; brand-loyal</div></div>
+<div><div class="label">Behavior</div><div class="value">Grocery; Whole Foods; premium kombucha buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> ~$250M retail revenue. Acquired by Generous Brands for $500M (Jul 2025). 65K outlets. $77M funding. Refrigerated, probiotic only. Exit at ~2x revenue = decent comp for Pheeew's eventual exit math. Proves strategic acquirer interest in gut health beverages.</p>
+</div>
+
+<!-- Remedy Kombucha -->
+<div class="comp-card" data-cat="kombucha">
+<div class="comp-header">
+<div class="comp-name">13. Remedy Kombucha</div>
+<div class="comp-score score-med">5</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">remedydrinks.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@remedydrinks (90K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Kombucha, functional sodas</div></div>
+<div><div class="label">Core Promise</div><div class="value">Tasty drinks with live cultures, no sugar</div></div>
+<div><div class="label">Price Tier</div><div class="value">$3-4/can</div></div>
+<div><div class="label">Age Range</div><div class="value">22-40</div></div>
+<div><div class="label">Gender</div><div class="value">Even split</div></div>
+<div><div class="label">Mindset</div><div class="value">No-sugar lifestyle; fun + functional</div></div>
+<div><div class="label">Behavior</div><div class="value">Grocery; convenience store; soda alternative buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Australian brand, expanding globally. $150M+ revenue. "No sugar" positioning similar to Pheeew's "0g added sugar." Shelf-stable kombucha (unusual) -- proves shelf-stable fermented beverages are accepted by consumers. Lower US presence limits direct competition currently.</p>
+</div>
+
+<!-- KeVita -->
+<div class="comp-card" data-cat="probiotic-drink">
+<div class="comp-header">
+<div class="comp-name">14. KeVita</div>
+<div class="comp-score score-med">6</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">kevita.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@kevitadrinks (98K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Probiotic drinks, sparkling probiotic, kombucha</div></div>
+<div><div class="label">Core Promise</div><div class="value">Sparkling probiotic drinks with live cultures</div></div>
+<div><div class="label">Price Tier</div><div class="value">$3-4/bottle</div></div>
+<div><div class="label">Age Range</div><div class="value">25-45</div></div>
+<div><div class="label">Gender</div><div class="value">Female 60/40</div></div>
+<div><div class="label">Mindset</div><div class="value">Casual wellness; gut health aware but not obsessive</div></div>
+<div><div class="label">Behavior</div><div class="value">Mainstream grocery (Costco, Target); value buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Owned by PepsiCo (acquired 2016 for ~$200M). Probiotic only. Refrigerated. PepsiCo distribution muscle = mass market presence. Validates big CPG interest in probiotic beverages. Lower innovation pace under corporate ownership.</p>
+</div>
+
+<!-- Activia -->
+<div class="comp-card" data-cat="yogurt">
+<div class="comp-header">
+<div class="comp-name">15. Activia</div>
+<div class="comp-score score-med">5</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">activia.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@activia (150K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Probiotic yogurt, drinkable yogurt</div></div>
+<div><div class="label">Core Promise</div><div class="value">Daily probiotic yogurt for digestive comfort</div></div>
+<div><div class="label">Price Tier</div><div class="value">$4-6/4-pack</div></div>
+<div><div class="label">Age Range</div><div class="value">30-60</div></div>
+<div><div class="label">Gender</div><div class="value">Female 70/30</div></div>
+<div><div class="label">Mindset</div><div class="value">Digestive comfort; traditional gut health; trust established brands</div></div>
+<div><div class="label">Behavior</div><div class="value">Mainstream grocery; habitual buyer; breakfast routine</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Danone brand. $2B+ global revenue. Paid $21M FTC settlement for overclaiming probiotic benefits -- critical regulatory precedent for Pheeew's claims strategy. Probiotic only, dairy-based. Pheeew can differentiate as vegan, portable, no refrigeration needed.</p>
+</div>
+
+<!-- Chobani -->
+<div class="comp-card" data-cat="yogurt">
+<div class="comp-header">
+<div class="comp-name">16. Chobani</div>
+<div class="comp-score score-low">4</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">chobani.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@chobani (1.1M)</div></div>
+<div><div class="label">Product Type</div><div class="value">Greek yogurt, functional dairy, oat milk</div></div>
+<div><div class="label">Core Promise</div><div class="value">Better food for more people</div></div>
+<div><div class="label">Price Tier</div><div class="value">$1.50-6/item</div></div>
+<div><div class="label">Age Range</div><div class="value">22-55</div></div>
+<div><div class="label">Gender</div><div class="value">Even split</div></div>
+<div><div class="label">Mindset</div><div class="value">Mass wellness; quality basics; mission-driven</div></div>
+<div><div class="label">Behavior</div><div class="value">Mass grocery; brand loyal; breakfast/snack routine</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $2.5B+ revenue. IPO filed. Live cultures in yogurt but no specific probiotic strain claims. Mass market positioning. Lower direct relevance but their Probiotic drinkable yogurt line is a format/occasion comp. Watch their functional beverage expansion.</p>
+</div>
+
+<!-- Siggi's -->
+<div class="comp-card" data-cat="yogurt">
+<div class="comp-header">
+<div class="comp-name">17. Siggi's</div>
+<div class="comp-score score-low">3</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">siggis.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@siggisdairy (164K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Icelandic-style skyr yogurt</div></div>
+<div><div class="label">Core Promise</div><div class="value">Simple ingredients, not a lot of sugar</div></div>
+<div><div class="label">Price Tier</div><div class="value">$2-3/cup</div></div>
+<div><div class="label">Age Range</div><div class="value">28-50</div></div>
+<div><div class="label">Gender</div><div class="value">Female 60/40</div></div>
+<div><div class="label">Mindset</div><div class="value">Ingredient minimalist; anti-sugar; quality over quantity</div></div>
+<div><div class="label">Behavior</div><div class="value">Premium grocery; Whole Foods; reads labels</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Owned by Lactalis. Premium positioning, clean label ethos. No specific probiotic/prebiotic claims. Low direct relevance but their "simple ingredients, not a lot of sugar" messaging mirrors Pheeew's "0g added sugar" angle. Brand storytelling (Icelandic heritage) parallels potential Korea origin story.</p>
+</div>
+
+<!-- Gruns -->
+<div class="comp-card" data-cat="adjacent">
+<div class="comp-header">
+<div class="comp-name">18. Gruns</div>
+<div class="comp-score score-med">6</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">gruns.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@gruns (450K+)</div></div>
+<div><div class="label">Product Type</div><div class="value">Gummy greens supplement (adjacent -- NOT direct food comp)</div></div>
+<div><div class="label">Core Promise</div><div class="value">Daily greens in a tasty gummy</div></div>
+<div><div class="label">Price Tier</div><div class="value">$1.38/day subscription</div></div>
+<div><div class="label">Age Range</div><div class="value">22-38</div></div>
+<div><div class="label">Gender</div><div class="value">Even split</div></div>
+<div><div class="label">Mindset</div><div class="value">Wellness optimization; easy compliance; anti-powder</div></div>
+<div><div class="label">Behavior</div><div class="value">DTC subscription; social media discovery; daily ritual</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $300M+ ARR. Acquired by Unilever for $1.2B. 10M gummies/day. 7K retail doors. NOT a food brand (supplement), but relevant as a DTC subscription health brand that achieved massive scale quickly. Their ad strategy (1,500+ concurrent Meta ads) and subscription model are study material for Pheeew's go-to-market. Adjacent competitor for wallet share.</p>
+</div>
+
+<!-- Ka'Chava -->
+<div class="comp-card" data-cat="meal-replace">
+<div class="comp-header">
+<div class="comp-name">19. Ka'Chava</div>
+<div class="comp-score score-low">4</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">kachava.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@kaborchava (200K+)</div></div>
+<div><div class="label">Product Type</div><div class="value">Plant-based meal replacement shake</div></div>
+<div><div class="label">Core Promise</div><div class="value">All-in-one superfood meal shake</div></div>
+<div><div class="label">Price Tier</div><div class="value">$4.67/serving (sub)</div></div>
+<div><div class="label">Age Range</div><div class="value">28-50</div></div>
+<div><div class="label">Gender</div><div class="value">Male 55/45</div></div>
+<div><div class="label">Mindset</div><div class="value">Meal optimization; nutrient density; convenience</div></div>
+<div><div class="label">Behavior</div><div class="value">DTC; subscription; meal replacement occasion</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $250M+ revenue. DTC-first with strong subscription model. Contains probiotics in blend but not a gut health brand. Different occasion (meal replacement vs. daily gut ritual). Pricing model and subscription mechanics worth studying.</p>
+</div>
+
+<!-- Huel -->
+<div class="comp-card" data-cat="meal-replace">
+<div class="comp-header">
+<div class="comp-name">20. Huel</div>
+<div class="comp-score score-low">3</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">huel.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@huel (280K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Complete meal replacement (powder, RTD, bars)</div></div>
+<div><div class="label">Core Promise</div><div class="value">Nutritionally complete convenient food</div></div>
+<div><div class="label">Price Tier</div><div class="value">$2.12/meal (powder sub)</div></div>
+<div><div class="label">Age Range</div><div class="value">22-40</div></div>
+<div><div class="label">Gender</div><div class="value">Male 65/35</div></div>
+<div><div class="label">Mindset</div><div class="value">Efficiency; nutritional optimization; time-saving</div></div>
+<div><div class="label">Behavior</div><div class="value">DTC subscription; tech-savvy; replaces meals not supplements</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $250M+ revenue. UK-based, global. RTD format and subscription model relevant to study. No specific gut health positioning. Lower relevance as a competitor but their bundle builder and subscription UX are worth copying.</p>
+</div>
+
+<!-- Soylent -->
+<div class="comp-card" data-cat="meal-replace">
+<div class="comp-header">
+<div class="comp-name">21. Soylent</div>
+<div class="comp-score score-low">3</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">soylent.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@soylent (145K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Complete nutrition drink, RTD</div></div>
+<div><div class="label">Core Promise</div><div class="value">Complete nutrition in a bottle</div></div>
+<div><div class="label">Price Tier</div><div class="value">$3-4/bottle</div></div>
+<div><div class="label">Age Range</div><div class="value">22-38</div></div>
+<div><div class="label">Gender</div><div class="value">Male 70/30</div></div>
+<div><div class="label">Mindset</div><div class="value">Biohacker; efficiency maximizer; anti-food-prep</div></div>
+<div><div class="label">Behavior</div><div class="value">Amazon; DTC; tech worker demographic</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $100M+ revenue. $72M funding. Multiple FDA warnings (bars recalled). Positioned as "food replacement" not "health enhancement." Low relevance but their Amazon strategy and tech-bro demographic could be an expansion target for Pheeew's "biohacker" angle.</p>
+</div>
+
+<!-- Oats Overnight -->
+<div class="comp-card" data-cat="adjacent">
+<div class="comp-header">
+<div class="comp-name">22. Oats Overnight</div>
+<div class="comp-score score-med">5</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">oatsovernight.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@oatsovernight (320K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Overnight oats, single-serve packets</div></div>
+<div><div class="label">Core Promise</div><div class="value">High-protein overnight oats in seconds</div></div>
+<div><div class="label">Price Tier</div><div class="value">$3-4/pack (sub discount)</div></div>
+<div><div class="label">Age Range</div><div class="value">25-40</div></div>
+<div><div class="label">Gender</div><div class="value">Male 55/45</div></div>
+<div><div class="label">Mindset</div><div class="value">Protein-focused; morning routine optimizer; convenience</div></div>
+<div><div class="label">Behavior</div><div class="value">DTC subscription; bundle builder; variety pack buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> $100M+ revenue. Format comp for Pheeew's bundle builder UX. Their "build your box" subscription model (pick flavors, set frequency) is the exact UX Pheeew should replicate. Single-serve packets, shelf-stable, shipped direct. Not a gut health brand but the operational model is a near-perfect template.</p>
+</div>
+
+<!-- So Good So You -->
+<div class="comp-card" data-cat="probiotic-drink">
+<div class="comp-header">
+<div class="comp-name">23. So Good So You</div>
+<div class="comp-score score-high">8</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">sogoodsoyou.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@sogoodsoyou (45K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Probiotic juice shots, 1.7oz</div></div>
+<div><div class="label">Core Promise</div><div class="value">Daily probiotic shot for immunity and energy</div></div>
+<div><div class="label">Price Tier</div><div class="value">$3-4/shot</div></div>
+<div><div class="label">Age Range</div><div class="value">28-45</div></div>
+<div><div class="label">Gender</div><div class="value">Female 65/35</div></div>
+<div><div class="label">Mindset</div><div class="value">Proactive health; daily ritual; functional nutrition</div></div>
+<div><div class="label">Behavior</div><div class="value">Natural grocery; Whole Foods / Target; routine buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> #1 probiotic shot brand in US. $16.1M funding. Profitable since 2019. 400%+ growth. Probiotic only (1B CFU) -- no prebiotic fiber. Refrigerated. Small format, daily ritual = very close to Pheeew's use case. Key differentiator for Pheeew: synbiotic (pre+pro), shelf-stable, vegan.</p>
+</div>
+
+<!-- Vive Organic -->
+<div class="comp-card" data-cat="probiotic-drink">
+<div class="comp-header">
+<div class="comp-name">24. Vive Organic</div>
+<div class="comp-score score-med">6</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">viveorganic.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@viveorganic (50K)</div></div>
+<div><div class="label">Product Type</div><div class="value">Wellness shots, 2oz</div></div>
+<div><div class="label">Core Promise</div><div class="value">Organic immunity and energy shots with probiotics</div></div>
+<div><div class="label">Price Tier</div><div class="value">$4-5/shot</div></div>
+<div><div class="label">Age Range</div><div class="value">28-45</div></div>
+<div><div class="label">Gender</div><div class="value">Female 60/40</div></div>
+<div><div class="label">Mindset</div><div class="value">Organic purist; immunity-focused; preventive health</div></div>
+<div><div class="label">Behavior</div><div class="value">Natural grocery; premium retail; immunity season buyer</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> 21M+ shots sold. Probiotic only (1B CFU). Ginger + turmeric base = flavor profile overlap with Pheeew's Ginger Pear SKU. Refrigerated. Smaller scale but well-positioned in the functional shot category. Competitive on the "daily dose" occasion.</p>
+</div>
+
+<!-- Korean: Birak Sikhye -->
+<div class="comp-card" data-cat="korean">
+<div class="comp-header">
+<div class="comp-name">25. Birak Sikhye (비락식혜)</div>
+<div class="comp-score score-med">5</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">birak.co.kr</div></div>
+<div><div class="label">Instagram</div><div class="value">@birak_official</div></div>
+<div><div class="label">Product Type</div><div class="value">Traditional Korean rice punch (식혜), functional drinks</div></div>
+<div><div class="label">Core Promise</div><div class="value">Traditional Korean digestive drink with modern convenience</div></div>
+<div><div class="label">Price Tier</div><div class="value">$1-2/can (Korea pricing)</div></div>
+<div><div class="label">Age Range</div><div class="value">All ages</div></div>
+<div><div class="label">Gender</div><div class="value">Even split</div></div>
+<div><div class="label">Mindset</div><div class="value">Korean heritage; digestive comfort; after-meal ritual</div></div>
+<div><div class="label">Behavior</div><div class="value">Korean grocery / convenience store; after-meal consumption; family size buyers</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Paldo subsidiary. Sikhye is Korea's OG digestive drink -- cultural anchor for "drinks that help digestion." No probiotics/prebiotics, just malt sugar and rice. Relevant as cultural context: Korean consumers already have a "functional digestive beverage" habit. Pheeew being manufactured in Korea can leverage this cultural DNA in storytelling. Not a US competitor but relevant for Korean market expansion.</p>
+</div>
+
+<!-- Korean: Cheongkwanjang (정관장) -->
+<div class="comp-card" data-cat="korean">
+<div class="comp-header">
+<div class="comp-name">26. Cheongkwanjang (정관장)</div>
+<div class="comp-score score-med">5</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">kgc.co.kr / us.kgc.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@cheongkwanjang_official</div></div>
+<div><div class="label">Product Type</div><div class="value">Korean red ginseng extracts, tonics, functional beverages</div></div>
+<div><div class="label">Core Promise</div><div class="value">Premium Korean red ginseng for vitality and immunity</div></div>
+<div><div class="label">Price Tier</div><div class="value">$30-200/box (premium positioning)</div></div>
+<div><div class="label">Age Range</div><div class="value">35-65</div></div>
+<div><div class="label">Gender</div><div class="value">Even split (gift culture skews older)</div></div>
+<div><div class="label">Mindset</div><div class="value">Korean traditional medicine; premium health investment; gift-giving</div></div>
+<div><div class="label">Behavior</div><div class="value">Department store / duty free; online subscription; gifting occasions</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> KGC (Korea Ginseng Corp). $1.5B+ revenue. Government-affiliated brand. The gold standard of Korean functional beverages. Single-serve pouch/stick format is common in their product line -- format precedent for pouch acceptance in Korea/Asia. Proves Korean consumers pay premium for functional health beverages. Their US expansion playbook (Asian grocery to mainstream) could map to Pheeew's retail strategy.</p>
+</div>
+
+<!-- Korean: Hy (하이) / Probio -->
+<div class="comp-card" data-cat="korean">
+<div class="comp-header">
+<div class="comp-name">27. Hy (하이) / Korea Yakult</div>
+<div class="comp-score score-med">7</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">hy.co.kr</div></div>
+<div><div class="label">Instagram</div><div class="value">@hy_official</div></div>
+<div><div class="label">Product Type</div><div class="value">Probiotic dairy drinks, MPRO3 / Probio</div></div>
+<div><div class="label">Core Promise</div><div class="value">Daily probiotic drink for gut health (Korean market)</div></div>
+<div><div class="label">Price Tier</div><div class="value">$0.80-2/bottle (Korea pricing)</div></div>
+<div><div class="label">Age Range</div><div class="value">All ages</div></div>
+<div><div class="label">Gender</div><div class="value">Even split</div></div>
+<div><div class="label">Mindset</div><div class="value">Daily health habit; trust in probiotics; Korean wellness culture</div></div>
+<div><div class="label">Behavior</div><div class="value">Home delivery (Yakult Lady); convenience store; daily purchase</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Formerly Korea Yakult, rebranded to Hy. ~$1.8B revenue. Their "Yakult Lady" direct delivery model is legendary -- proof that single-serve probiotic drinks can build massive businesses on routine/subscription. MPRO3 line is their premium play. Dairy-based, refrigerated. If Pheeew launches in Korea, Hy is the 800-lb gorilla. Their market dominance validates the category but also makes it crowded domestically. US-first strategy for Pheeew makes sense.</p>
+</div>
+
+<!-- Liquid+ -->
+<div class="comp-card" data-cat="adjacent">
+<div class="comp-header">
+<div class="comp-name">28. Liquid+</div>
+<div class="comp-score score-high">8</div>
+</div>
+<div class="comp-meta">
+<div><div class="label">Website</div><div class="value">drinkliquidplus.com</div></div>
+<div><div class="label">Instagram</div><div class="value">@drinkliquidplus</div></div>
+<div><div class="label">Product Type</div><div class="value">Prebiotic fiber drink, 4.23oz pouch</div></div>
+<div><div class="label">Core Promise</div><div class="value">"Liquid Salad" -- 8g prebiotic fiber in a pouch</div></div>
+<div><div class="label">Price Tier</div><div class="value">$1.95/day subscription</div></div>
+<div><div class="label">Age Range</div><div class="value">25-40</div></div>
+<div><div class="label">Gender</div><div class="value">Female 60/40</div></div>
+<div><div class="label">Mindset</div><div class="value">Gut health optimizer; fiber-aware; convenience-first</div></div>
+<div><div class="label">Behavior</div><div class="value">DTC subscription; Amazon; daily dose ritual</div></div>
+</div>
+<p style="margin-top:6px"><strong>Notes:</strong> Early stage (&lt;$5M est. revenue). Pouch format, prebiotic fiber, DTC subscription = closest format + function comp to Pheeew. Prebiotic only (no probiotic), so NOT synbiotic. "Liquid Salad" branding is clever but different positioning than Pheeew's smoothie identity. Their existence validates the pouch + prebiotic + subscription model. Pheeew wins on: real fruit purees (taste), added probiotic (synbiotic), and stronger brand design.</p>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- MATRIX VIEW -->
+<!-- ============================================================ -->
+<div class="pg" id="matrix">
+<h1>Competitive Matrix</h1>
+<div class="sub">All 28 brands compared across key dimensions</div>
+
+<h2>Relevance Score Rankings</h2>
+<div class="S">
+<table>
+<tr><th>#</th><th>Brand</th><th>Score</th><th>Category</th><th>Why This Score</th></tr>
+<tr><td>1</td><td><strong>GoodBelly</strong></td><td class="lime">9</td><td>Probiotic Drink</td><td>IS synbiotic, dying brand, same target, never owned the term</td></tr>
+<tr><td>2</td><td><strong>Yakult</strong></td><td class="lime">9</td><td>Probiotic Drink</td><td>Format comp (small daily dose), Pheeew is "next-gen Yakult"</td></tr>
+<tr><td>3</td><td><strong>OLIPOP</strong></td><td class="lime">8</td><td>Prebiotic Soda</td><td>Category leader, proves prebiotic fiber demand, different format</td></tr>
+<tr><td>4</td><td><strong>Poppi</strong></td><td class="lime">8</td><td>Prebiotic Soda</td><td>$1.95B exit, proves market but also shows overclaim risk</td></tr>
+<tr><td>5</td><td><strong>So Good So You</strong></td><td class="lime">8</td><td>Probiotic Shot</td><td>Same daily ritual occasion, same single-serve format, probiotic only</td></tr>
+<tr><td>6</td><td><strong>Liquid+</strong></td><td class="lime">8</td><td>Prebiotic Pouch</td><td>Closest format comp: pouch + prebiotic + DTC sub. No probiotic.</td></tr>
+<tr><td>7</td><td><strong>GT's Kombucha</strong></td><td class="lime">7</td><td>Kombucha</td><td>Proved "gut health drink as ritual" at $275M, 100% founder-owned</td></tr>
+<tr><td>8</td><td><strong>Suja</strong></td><td class="lime">7</td><td>Cold-Pressed Juice</td><td>$326M, IPO filing, owns Slice (biotic soda), shot format comp</td></tr>
+<tr><td>9</td><td><strong>Daily Harvest</strong></td><td class="lime">7</td><td>Functional Smoothie</td><td>Smoothie format, DTC sub model, plant-based. Frozen limitation.</td></tr>
+<tr><td>10</td><td><strong>Hy (Korea Yakult)</strong></td><td class="lime">7</td><td>Korean Probiotic</td><td>Korean market gorilla, validates daily probiotic drink culture</td></tr>
+<tr><td>11</td><td><strong>Health-Ade</strong></td><td>6</td><td>Kombucha</td><td>$500M exit proves acquirer interest in gut beverages</td></tr>
+<tr><td>12</td><td><strong>Lifeway Kefir</strong></td><td>6</td><td>Kefir</td><td>Public company, probiotic drink, dairy-based limitation</td></tr>
+<tr><td>13</td><td><strong>KeVita</strong></td><td>6</td><td>Probiotic Drink</td><td>PepsiCo owned, mass market probiotic, distribution model</td></tr>
+<tr><td>14</td><td><strong>Splendid Spoon</strong></td><td>6</td><td>Plant-Based Smoothie</td><td>DTC smoothie sub model, niche but proves premium pricing</td></tr>
+<tr><td>15</td><td><strong>Vive Organic</strong></td><td>6</td><td>Wellness Shot</td><td>Ginger-based shots, probiotic, same daily dose occasion</td></tr>
+<tr><td>16</td><td><strong>Gruns</strong></td><td>6</td><td>Adjacent (Gummy)</td><td>$1.2B Unilever exit, DTC sub playbook, ad strategy to study</td></tr>
+<tr><td>17</td><td><strong>Remedy</strong></td><td>5</td><td>Kombucha</td><td>Shelf-stable kombucha proves consumer accept shelf-stable fermented</td></tr>
+<tr><td>18</td><td><strong>Activia</strong></td><td>5</td><td>Probiotic Yogurt</td><td>$21M FTC settlement = claims precedent. Mass market probiotic.</td></tr>
+<tr><td>19</td><td><strong>Oats Overnight</strong></td><td>5</td><td>Adjacent (Oats)</td><td>Bundle builder UX template, DTC sub model, shelf-stable</td></tr>
+<tr><td>20</td><td><strong>Birak Sikhye</strong></td><td>5</td><td>Korean Traditional</td><td>Cultural context for digestive drink habit in Korea</td></tr>
+<tr><td>21</td><td><strong>Cheongkwanjang</strong></td><td>5</td><td>Korean Functional</td><td>Pouch format precedent, premium pricing model, US expansion playbook</td></tr>
+<tr><td>22</td><td><strong>Pressed Juicery</strong></td><td>5</td><td>Cold-Pressed Juice</td><td>Premium juice, retail model, same wellness wallet share</td></tr>
+<tr><td>23</td><td><strong>Ka'Chava</strong></td><td>4</td><td>Meal Replacement</td><td>DTC sub model, $250M, pricing strategy worth studying</td></tr>
+<tr><td>24</td><td><strong>Harmless Harvest</strong></td><td>4</td><td>Coconut Water</td><td>Premium functional bev, sustainability storytelling model</td></tr>
+<tr><td>25</td><td><strong>Chobani</strong></td><td>4</td><td>Yogurt</td><td>Mass wellness, expanding into functional beverages</td></tr>
+<tr><td>26</td><td><strong>Siggi's</strong></td><td>3</td><td>Yogurt</td><td>Clean label/low sugar messaging parallel, heritage branding</td></tr>
+<tr><td>27</td><td><strong>Huel</strong></td><td>3</td><td>Meal Replacement</td><td>Bundle builder UX, subscription model, low direct relevance</td></tr>
+<tr><td>28</td><td><strong>Soylent</strong></td><td>3</td><td>Meal Replacement</td><td>Amazon strategy, tech-bro demo, low direct relevance</td></tr>
+</table>
+</div>
+
+<h2>Format x Function Matrix</h2>
+<div class="S">
+<table>
+<tr><th></th><th>Prebiotic Only</th><th>Probiotic Only</th><th>Synbiotic (Pre+Pro)</th><th>Neither</th></tr>
+<tr><td><strong>Pouch / Shot</strong></td><td>Liquid+</td><td>So Good So You, Vive Organic</td><td class="lime"><strong>PHEEEW (only one)</strong></td><td>POUCH, Noka</td></tr>
+<tr><td><strong>Can / Bottle (RTD)</strong></td><td>OLIPOP, Poppi</td><td>Yakult, KeVita, Hy</td><td>GoodBelly (dying, never says it)</td><td>Pressed, Harmless</td></tr>
+<tr><td><strong>Large Format (16oz+)</strong></td><td>--</td><td>GT's, Health-Ade, Remedy, Lifeway</td><td>--</td><td>Suja, Daily Harvest</td></tr>
+<tr><td><strong>Yogurt / Dairy</strong></td><td>--</td><td>Activia, Chobani</td><td>--</td><td>Siggi's</td></tr>
+<tr><td><strong>Non-Beverage</strong></td><td>--</td><td>--</td><td>BelliWelli (powder), Lemme (gummy)</td><td>Oats O/N, Huel, Soylent, Ka'Chava</td></tr>
+</table>
+</div>
+
+<div class="diamond">
+<h3>Key Insight</h3>
+<p style="font-size:10px;color:#ccc;line-height:1.8"><strong style="color:#DAFF00">Pheeew owns the only empty cell that matters:</strong> Synbiotic + Pouch/Shot format. No other brand combines prebiotic fiber AND probiotics in a shelf-stable, single-serve, ready-to-drink pouch. GoodBelly is the closest (synbiotic + RTD) but they're in decline, never owned the "synbiotic" term, and use cartons/bottles (not pouches). This is a category of one.</p>
+</div>
+
+<h2>Price Positioning Map</h2>
+<div class="S">
+<table>
+<tr><th>Tier</th><th>Price/Serving</th><th>Brands</th><th>Pheeew Position</th></tr>
+<tr><td class="green"><strong>Mass</strong></td><td>$0.50-2.00</td><td>Yakult, Birak, Hy, Soylent, Huel, Liquid+</td><td>--</td></tr>
+<tr><td class="yel"><strong>Mid</strong></td><td>$2.00-4.00</td><td>OLIPOP, Poppi, KeVita, Remedy, Oats O/N, GoodBelly</td><td class="lime"><strong>$2.80-3.00/pouch (sub)</strong></td></tr>
+<tr><td class="org"><strong>Premium</strong></td><td>$4.00-6.00</td><td>GT's, Health-Ade, Suja, Vive, Pressed, So Good So You</td><td class="lime"><strong>$4.50/pouch (one-time)</strong></td></tr>
+<tr><td class="red"><strong>Super Premium</strong></td><td>$6.00+</td><td>Daily Harvest, Splendid Spoon, Ka'Chava, Cheongkwanjang</td><td>--</td></tr>
+</table>
+<p style="margin-top:6px"><strong>Notes:</strong> Pheeew's sub price ($2.80-3.00) sits at mid-tier, competitive with OLIPOP/Poppi. One-time price ($4.50) sits at premium tier with functional shots. The sub discount (33-38% off) is aggressive and drives retention. Smart pricing: accessible enough for trial, premium enough for margin.</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DELIVERABLE 2: LAUNCH READINESS AUDIT -->
+<!-- ============================================================ -->
+<div class="pg" id="audit">
+<h1>Launch Readiness Audit</h1>
+<div class="sub">127 items across 10 operational areas -- scored, tagged, and flagged</div>
+
+<div class="diamond">
+<h3>Scoring Legend</h3>
+<p style="font-size:10px;color:#ccc">
+<span class="tag tag-done">DONE</span> = Complete and verified.
+<span class="tag tag-ip">IN PROGRESS</span> = Started, not finished.
+<span class="tag tag-ns">NOT STARTED</span> = Not begun.
+<span class="tag tag-crit">CRITICAL</span> = Blocks launch if not resolved.
+</p>
+<p style="font-size:10px;color:#ccc;margin-top:4px">Section scores are 1-10 (10 = fully ready). Overall composite: <strong class="lime">4.8 / 10</strong></p>
+</div>
+
+<h2>Section Scores at a Glance</h2>
+<div class="S">
+<table>
+<tr><th>#</th><th>Area</th><th>Score</th><th>Done</th><th>In Progress</th><th>Not Started</th><th>Critical Gaps</th></tr>
+<tr><td>1</td><td><strong>Legal & Compliance</strong></td><td class="green">7/10</td><td>8</td><td>3</td><td>4</td><td>2</td></tr>
+<tr><td>2</td><td><strong>Manufacturing & Supply Chain</strong></td><td class="yel">4/10</td><td>2</td><td>4</td><td>7</td><td>4</td></tr>
+<tr><td>3</td><td><strong>Technology & Infrastructure</strong></td><td class="yel">5/10</td><td>4</td><td>3</td><td>6</td><td>1</td></tr>
+<tr><td>4</td><td><strong>Finance & Accounting</strong></td><td class="green">6/10</td><td>5</td><td>3</td><td>4</td><td>1</td></tr>
+<tr><td>5</td><td><strong>Product & Formulation</strong></td><td class="yel">5/10</td><td>4</td><td>4</td><td>5</td><td>2</td></tr>
+<tr><td>6</td><td><strong>Marketing & Brand</strong></td><td class="yel">4/10</td><td>3</td><td>5</td><td>6</td><td>1</td></tr>
+<tr><td>7</td><td><strong>Sales & Distribution</strong></td><td class="red">3/10</td><td>1</td><td>2</td><td>9</td><td>3</td></tr>
+<tr><td>8</td><td><strong>Operations & CX</strong></td><td class="red">3/10</td><td>1</td><td>2</td><td>9</td><td>2</td></tr>
+<tr><td>9</td><td><strong>Team & HR</strong></td><td class="green">7/10</td><td>8</td><td>2</td><td>3</td><td>1</td></tr>
+<tr><td>10</td><td><strong>Investment & Fundraising</strong></td><td class="yel">4/10</td><td>2</td><td>3</td><td>5</td><td>1</td></tr>
+</table>
+</div>
+
+<p style="font-size:10px;color:#ccc;margin-top:6px">Click the tabs above (1. Legal through 10. Invest) to see all items per section.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 1: LEGAL & COMPLIANCE -->
+<!-- ============================================================ -->
+<div class="pg" id="legal">
+<h1>1. Legal & Compliance <span class="section-score green">7 / 10</span></h1>
+<div class="sub">FOOD rules apply -- NOT supplement. No DSHEA, no S/F notification. Nutrition Facts panel, 21 CFR 101, FDA food facility registration.</div>
+
+<h3>Entity & Corporate</h3>
+<div class="audit-item"><div class="audit-num">1.01</div><div>Delaware C-Corp formation (Pheeew, Inc.) via Stripe Atlas</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">1.02</div><div>EIN obtained from IRS</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">1.03</div><div>California state qualification / foreign corp registration (operating in CA)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">1.04</div><div>Registered agent service active</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">1.05</div><div>Board resolutions for equity restructure documented</div><div class="audit-status st-done">DONE</div></div>
+
+<h3>FDA & Food Regulation</h3>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">1.06</div><div><span class="tag tag-crit">CRITICAL</span> FDA food facility registration (21 CFR Part 1.225) -- BOTH US importer facility AND Korean manufacturer must register. Biennial renewal required. This is NOT supplement registration -- different form, different requirements.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">1.07</div><div><span class="tag tag-crit">CRITICAL</span> Prior Notice of imported food (21 CFR 1.279) -- required for EVERY shipment of food entering US. Must be filed before arrival. Need customs broker.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">1.08</div><div>Nutrition Facts panel design per 21 CFR 101.9 (NOT Supplement Facts). Requires proximate analysis of final formula. Must show: calories, total fat, sodium, total carbs, dietary fiber (can highlight 10g), total sugars (0g added sugar), protein, Vitamin D, calcium, iron, potassium. Serving size = 1 pouch (100mL).</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">1.09</div><div>Food labeling compliance per 21 CFR 101 -- ingredient list (descending weight), allergen declaration (FALCPA + sesame), net quantity, name/address of manufacturer/importer, product name, country of origin ("Product of Korea").</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">1.10</div><div>Probiotic claims strategy for FOOD (not supplement). On food labels: can say "contains probiotics" or "with live cultures" but CANNOT make disease claims. Structure/function claims on food require different substantiation than supplements. "Supports digestive health" is borderline -- consult FDA food labeling attorney.</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">1.11</div><div>Fiber content claim verification: "Good source of fiber" requires 2.5g+/serving, "Excellent source" requires 5g+. Pheeew has 10g = qualifies for "Excellent source of fiber" nutrient content claim per 21 CFR 101.54.</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">1.12</div><div>FSMA (Food Safety Modernization Act) compliance -- Preventive Controls for Human Food (21 CFR 117). Korean manufacturer must have FSMA-compliant food safety plan. If facility is foreign, need FSVP (Foreign Supplier Verification Program) importer.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Trademark & IP</h3>
+<div class="audit-item"><div class="audit-num">1.13</div><div>Trademark search for "Pheeew" in food/beverage class (Nice Class 32: beers + non-alcoholic beverages; Class 29: processed fruits)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">1.14</div><div>Trademark application filed (USPTO)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">1.15</div><div>Domain secured (pheeew.com or equivalent)</div><div class="audit-status st-done">DONE</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 2: MANUFACTURING & SUPPLY CHAIN -->
+<!-- ============================================================ -->
+<div class="pg" id="mfg">
+<h1>2. Manufacturing & Supply Chain <span class="section-score yel">4 / 10</span></h1>
+<div class="sub">Korea manufacturing via COSMAX or similar. 120K pouches per SKU design roll. Shelf-stable pouch requires process authority.</div>
+
+<h3>Manufacturer Selection</h3>
+<div class="audit-item"><div class="audit-num">2.01</div><div>COSMAX identified as potential manufacturer (Korea)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">2.02</div><div><span class="tag tag-crit">CRITICAL</span> Manufacturing contract / co-packing agreement signed with terms: MOQ (120K/SKU), pricing, lead times, quality specs, IP ownership, exclusivity clause</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">2.03</div><div>Alternative manufacturer identified as backup (not COSMAX)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">2.04</div><div>Manufacturer facility audit -- GMP, HACCP, ISO 22000 certifications verified</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+
+<h3>Process & Safety</h3>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">2.05</div><div><span class="tag tag-crit">CRITICAL</span> Process authority letter for shelf-stable pouch. FDA requires a process authority (qualified person per 21 CFR 113/114) to validate thermal processing for shelf-stable low-acid or acidified foods. Must confirm the process achieves commercial sterility. Without this, product cannot legally be sold as shelf-stable.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">2.06</div><div><span class="tag tag-crit">CRITICAL</span> Thermal processing validation -- retort/pasteurization parameters that kill pathogens while preserving B. coagulans viability (spore-forming = survives heat, but must be validated). Fibersol-2 and XOS stability under processing conditions also need verification.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">2.07</div><div>Shelf life study (accelerated + real-time). Target: 12-18 months ambient. Must verify probiotic viability (1B CFU) at end of shelf life, not just at manufacturing.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">2.08</div><div>Water activity (aw) and pH testing -- determines whether product is "acid food" or "low-acid canned food" under FDA regs. Affects which CFR section applies.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Packaging</h3>
+<div class="audit-item"><div class="audit-num">2.09</div><div>Pouch material specification -- food-grade, barrier properties (oxygen, moisture, light), BPA-free, compatible with retort/thermal processing</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">2.10</div><div>Pouch supplier identified and sampled</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">2.11</div><div>Packaging artwork / design files (3 SKUs: Ginger Pear, Wild Berries, Tropical Punch) -- print-ready, compliant with FDA labeling requirements</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Logistics & Import</h3>
+<div class="audit-item"><div class="audit-num">2.12</div><div>Freight forwarder selected for Korea-to-US ocean/air shipping</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">2.13</div><div>US customs broker engaged (handles FDA Prior Notice, customs clearance, duties/tariffs)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 3: TECHNOLOGY & INFRASTRUCTURE -->
+<!-- ============================================================ -->
+<div class="pg" id="tech">
+<h1>3. Technology & Infrastructure <span class="section-score yel">5 / 10</span></h1>
+<div class="sub">Shopify store exists. Core stack needs buildout for subscriptions, email, analytics.</div>
+
+<h3>E-commerce</h3>
+<div class="audit-item"><div class="audit-num">3.01</div><div>Shopify store created (jjffyu-pr.myshopify.com)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">3.02</div><div>Custom domain connected to Shopify</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">3.03</div><div>Shopify theme selected, customized, and QA'd for mobile</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">3.04</div><div><span class="tag tag-crit">CRITICAL</span> Subscription app installed and configured (Recharge, Skio, or Loop). Must support: 15/30/60 pack bundles, flexible frequency, skip/pause/cancel, subscriber-only pricing ($2.80-3.00 vs $4.50 OT)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">3.05</div><div>Bundle builder app / custom development for mix-and-match SKU selection</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">3.06</div><div>Product pages built for 3 SKUs with compliant claims copy</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">3.07</div><div>Checkout flow tested (Shopify Checkout, payment methods, tax calculation)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Payments & Financial</h3>
+<div class="audit-item"><div class="audit-num">3.08</div><div>Stripe connected to Shopify for payment processing</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">3.09</div><div>Mercury IO bank account set up</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">3.10</div><div>Sales tax compliance tool (TaxJar, Avalara, or Shopify Tax)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Marketing Tech</h3>
+<div class="audit-item"><div class="audit-num">3.11</div><div>Email platform selected (Klaviyo recommended for Shopify integration)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">3.12</div><div>Analytics stack: Google Analytics 4, Meta Pixel, TikTok Pixel installed</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">3.13</div><div>SMS marketing tool (Postscript, Attentive, or Klaviyo SMS)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 4: FINANCE & ACCOUNTING -->
+<!-- ============================================================ -->
+<div class="pg" id="finance">
+<h1>4. Finance & Accounting <span class="section-score green">6 / 10</span></h1>
+<div class="sub">$20K bootstrap capital. Mercury IO banking. Need accounting system, budget, and financial projections.</div>
+
+<h3>Banking & Payments</h3>
+<div class="audit-item"><div class="audit-num">4.01</div><div>Mercury IO business bank account opened</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">4.02</div><div>Stripe Atlas entity + payment processing set up</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">4.03</div><div>Corporate credit card / debit card issued (Mercury)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">4.04</div><div>Bootstrap capital deposited ($10K Alex + $10K Jason = $20K)</div><div class="audit-status st-done">DONE</div></div>
+
+<h3>Accounting & Tax</h3>
+<div class="audit-item"><div class="audit-num">4.05</div><div>Accounting software set up (QuickBooks Online or Xero)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">4.06</div><div>Chart of accounts configured for food/CPG business (COGS breakdown: ingredients, packaging, manufacturing, freight, duties)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">4.07</div><div>CPA / tax advisor engaged (need food/bev CPG experience, international manufacturing knowledge)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">4.08</div><div>Delaware franchise tax calendar set (annual report + franchise tax due March 1)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">4.09</div><div><span class="tag tag-crit">CRITICAL</span> Sales tax nexus analysis -- food/beverage sales tax exemptions vary by state. Many states exempt "food for home consumption" but definitions differ. Need state-by-state analysis for DTC shipping.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Financial Planning</h3>
+<div class="audit-item"><div class="audit-num">4.10</div><div>Unit economics model built (COGS per pouch, gross margin target, CAC, LTV)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">4.11</div><div>12-month cash flow projection</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">4.12</div><div>Runway calculation based on $20K bootstrap (how many months before additional capital needed?)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 5: PRODUCT & FORMULATION -->
+<!-- ============================================================ -->
+<div class="pg" id="product">
+<h1>5. Product & Formulation <span class="section-score yel">5 / 10</span></h1>
+<div class="sub">Formula concept locked. Key ingredients identified. Production samples and validation needed.</div>
+
+<h3>Formulation</h3>
+<div class="audit-item"><div class="audit-num">5.01</div><div>Core formula defined: 10g prebiotic fiber (Fibersol-2 + XOS) + 1B B. coagulans SNZ 1969 + real fruit purees, 0g added sugar, vegan</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">5.02</div><div>Three SKU flavors defined: Ginger Pear, Wild Berries, Tropical Punch</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">5.03</div><div>Fibersol-2 supplier identified and sample sourced (ADM / Matsutani)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">5.04</div><div>XOS (xylooligosaccharide) supplier identified and sample sourced</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">5.05</div><div>B. coagulans SNZ 1969 supplier identified (Sanzyme Biologics or distributor)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">5.06</div><div>Fruit puree suppliers identified for 3 SKUs (must be food-grade, shelf-stable compatible)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+
+<h3>Validation</h3>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">5.07</div><div><span class="tag tag-crit">CRITICAL</span> Bench-top / lab samples produced for each SKU. Need to verify: taste, texture, color, viscosity, fiber dissolution, probiotic dispersion. Cannot launch without tasting actual product.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">5.08</div><div><span class="tag tag-crit">CRITICAL</span> Proximate analysis (nutritional lab testing) of final formula -- required to create accurate Nutrition Facts panel. Tests: calories, fat, protein, carbs, fiber, sugars, vitamins, minerals.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">5.09</div><div>Probiotic stability testing under pouch storage conditions (ambient, various temperatures). B. coagulans is spore-forming (good for stability) but need data to back label claim of 1B CFU at end of shelf life.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">5.10</div><div>Taste testing panel / consumer feedback on samples (minimum N=20 for directional signal)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">5.11</div><div>Allergen assessment for all ingredients across 3 SKUs (FALCPA 9 major allergens + sesame)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+
+<h3>Quality</h3>
+<div class="audit-item"><div class="audit-num">5.12</div><div>Quality specification document for each SKU (acceptable ranges for pH, Brix, viscosity, color, microbial counts, probiotic CFU)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">5.13</div><div>Incoming ingredient testing protocol (COAs from each supplier, identity/purity/potency verification)</div><div class="audit-status st-done">DONE</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 6: MARKETING & BRAND -->
+<!-- ============================================================ -->
+<div class="pg" id="marketing">
+<h1>6. Marketing & Brand <span class="section-score yel">4 / 10</span></h1>
+<div class="sub">Brand identity developing. Content strategy started. Need full creative suite, ad accounts, pre-launch funnel.</div>
+
+<h3>Brand Identity</h3>
+<div class="audit-item"><div class="audit-num">6.01</div><div>Brand name finalized: Pheeew</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">6.02</div><div>Brand copy guide created (for Dawon and team)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">6.03</div><div>Visual identity system: logo, color palette (lime #DAFF00 accent), typography, packaging design</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">6.04</div><div>Brand photography / product photography (3 SKUs, lifestyle shots, ingredient shots)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Content & Social</h3>
+<div class="audit-item"><div class="audit-num">6.05</div><div>Instagram account created (@saypheeew)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">6.06</div><div>Content strategy / content pillar framework defined</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">6.07</div><div>Video content framework (Alex review version exists)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">6.08</div><div>Educational content series: "Know Your Fiber" concept developed</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">6.09</div><div>TikTok account created and content strategy defined</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Pre-Launch</h3>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">6.10</div><div><span class="tag tag-crit">CRITICAL</span> Pre-launch landing page / waitlist with email capture. Need this BEFORE any paid or organic traffic push. Integrates with Klaviyo for email nurture sequence.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">6.11</div><div>Pre-launch email nurture sequence (education-first: what is synbiotic, why fiber matters, product reveal, launch offer)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">6.12</div><div>Paid media accounts set up (Meta Ads, TikTok Ads, Google Ads)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">6.13</div><div>Influencer / creator outreach list (micro-influencers in gut health, clean eating, fitness)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">6.14</div><div>Website copy written and compliance-reviewed (claims must be food-compliant, not supplement-style)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 7: SALES & DISTRIBUTION -->
+<!-- ============================================================ -->
+<div class="pg" id="sales">
+<h1>7. Sales & Distribution <span class="section-score red">3 / 10</span></h1>
+<div class="sub">DTC-first strategy defined. Retail roadmap needed. Grace International pitch sent.</div>
+
+<h3>DTC Channel</h3>
+<div class="audit-item"><div class="audit-num">7.01</div><div>DTC-first go-to-market strategy defined</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">7.02</div><div>Pricing structure finalized: $4.50/pouch OT, $2.80-3.00/pouch sub, 15/30/60 packs</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">7.03</div><div>Subscription tiers and discount structure finalized</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">7.04</div><div>Amazon listing strategy (FBA vs FBM, listing optimization, A+ content)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Retail Channel</h3>
+<div class="audit-item"><div class="audit-num">7.05</div><div>Retail channel roadmap (Phase 1: independent natural grocers, Phase 2: regional chains, Phase 3: national)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">7.06</div><div>Retail sell sheet / one-pager for buyer meetings</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">7.07</div><div>Trade show plan (Expo West, Fancy Food Show, etc.)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">7.08</div><div><span class="tag tag-crit">CRITICAL</span> UPC / barcode obtained (GS1 membership for retail-ready barcodes). Need one per SKU + multipacks.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Partnerships</h3>
+<div class="audit-item"><div class="audit-num">7.09</div><div>Grace International pitch deck sent (potential investor/distributor)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">7.10</div><div><span class="tag tag-crit">CRITICAL</span> Distribution partner identified for Korean-market or Asian grocery channel in US (H Mart, 99 Ranch, etc.)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">7.11</div><div>Wholesale pricing structure defined (distributor margin, retailer margin, MAP policy)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">7.12</div><div><span class="tag tag-crit">CRITICAL</span> Shipping cost analysis for DTC (shelf-stable pouch weight, dimensional weight, zone pricing). Need to determine free-shipping threshold and whether shipping is included in price.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 8: OPERATIONS & CX -->
+<!-- ============================================================ -->
+<div class="pg" id="ops">
+<h1>8. Operations & Customer Experience <span class="section-score red">3 / 10</span></h1>
+<div class="sub">Nearly everything is NOT STARTED. Need fulfillment, CX tools, returns policy, and operational SOPs.</div>
+
+<h3>Fulfillment</h3>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">8.01</div><div><span class="tag tag-crit">CRITICAL</span> 3PL / fulfillment partner selected and contracted. Shelf-stable pouches = ambient warehousing (no cold chain needed = cost advantage). Need: pick/pack/ship capability, Shopify integration, subscription order handling.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">8.02</div><div>Shipping box / mailer design (branded unboxing experience, pouch protection, inserts)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">8.03</div><div>Shipping carrier accounts set up (USPS, UPS, FedEx) with negotiated rates</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">8.04</div><div>Order fulfillment SOP (order received to shipped, target SLA: 1-2 business days)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Customer Experience</h3>
+<div class="audit-item"><div class="audit-num">8.05</div><div>Customer service email / helpdesk set up (Gorgias, Zendesk, or Shopify Inbox)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">8.06</div><div>Returns & refund policy written (food products typically no-return, credit/reship instead)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">8.07</div><div>FAQ page content written (storage, shelf life, consumption instructions, allergens, subscription management)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">8.08</div><div>Subscription management portal for customers (skip, pause, swap flavors, cancel)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Quality & Compliance Ops</h3>
+<div class="audit-item"><div class="audit-num">8.09</div><div>Product recall plan documented (FDA requires food companies to have recall procedures)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">8.10</div><div><span class="tag tag-crit">CRITICAL</span> Lot tracking / traceability system. FDA requires food companies to maintain records to trace product one step forward / one step back (21 CFR 1.337-1.368). Need lot codes on every pouch.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">8.11</div><div>Consumer complaint tracking process</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">8.12</div><div>Inventory management system (track inbound from Korea, warehouse levels, reorder points)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">8.13</div><div>Expiration date / best-by date format and policy defined</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 9: TEAM & HR -->
+<!-- ============================================================ -->
+<div class="pg" id="team">
+<h1>9. Team & HR <span class="section-score green">7 / 10</span></h1>
+<div class="sub">Co-founder agreements done, equity structured, CIIA exists. Dawon ITIN is the open item.</div>
+
+<h3>Co-Founder Agreements</h3>
+<div class="audit-item"><div class="audit-num">9.01</div><div>Co-founder agreement executed (.docx exists)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">9.02</div><div>Equity split formalized: Alex 35% (3,150,000 shares), Jason 33% (2,970,000), Dawon 32% (2,880,000), Pool 10% (1,000,000)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">9.03</div><div>RSPAs (Restricted Stock Purchase Agreements) executed for Alex, Jason, Dawon</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">9.04</div><div>Vesting schedules defined and documented in RSPAs (standard 4-year with 1-year cliff assumed)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">9.05</div><div>Stock cancellation agreement for Seungjoon Kim executed</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">9.06</div><div>Board resolution for equity restructure documented</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">9.07</div><div>83(b) elections filed with IRS within 30 days of stock grants (for Alex and Jason; Dawon needs ITIN first)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+
+<h3>IP & Confidentiality</h3>
+<div class="audit-item"><div class="audit-num">9.08</div><div>CIIA (Confidential Information and Inventions Assignment) agreement executed by all co-founders</div><div class="audit-status st-done">DONE</div></div>
+
+<h3>HR & Admin</h3>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">9.09</div><div><span class="tag tag-crit">CRITICAL</span> Dawon ITIN application filed. Required for: 83(b) election, tax reporting, stock ownership formalization. Research doc exists (ITIN_Research_Dawon_20260409.html). File W-7 with IRS -- can use CAA (Certified Acceptance Agent) to expedite.</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">9.10</div><div>Roles and responsibilities documented: Alex (CEO, CA), Jason (COO, CA), Dawon (CDO, Korea)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">9.11</div><div>Option pool (10%, 1,000,000 shares) reserved for future hires -- stock option plan (ISO/NSO) document drafted</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">9.12</div><div>Remote team communication tools set up (Slack, Notion, or equivalent for US-Korea async work)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">9.13</div><div>Contractor agreements template for any non-founder contributors (freelance designers, etc.)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- AREA 10: INVESTMENT & FUNDRAISING -->
+<!-- ============================================================ -->
+<div class="pg" id="invest">
+<h1>10. Investment & Fundraising <span class="section-score yel">4 / 10</span></h1>
+<div class="sub">Grace International pitch sent. Need cap table management, investor materials, and fundraising strategy.</div>
+
+<h3>Investor Pipeline</h3>
+<div class="audit-item"><div class="audit-num">10.01</div><div>Grace International pitch deck sent (v5 exists)</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">10.02</div><div>Grace International follow-up and relationship management</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">10.03</div><div>Investor target list beyond Grace (angels, food/bev VCs, accelerators: Y Combinator, SKS Ventures, CircleUp, AccelFoods)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">10.04</div><div>Accelerator applications (Y Combinator, Techstars Farm-to-Fork, Chobani Incubator, Target Accelerator)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Fundraising Materials</h3>
+<div class="audit-item"><div class="audit-num">10.05</div><div>Investor pitch deck polished and updated with latest competitive data</div><div class="audit-status st-done">DONE</div></div>
+<div class="audit-item"><div class="audit-num">10.06</div><div>Financial model / projections for investor review (3-year P&L, unit economics, path to profitability)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item" style="border-color:#c0392b"><div class="audit-num">10.07</div><div><span class="tag tag-crit">CRITICAL</span> Cap table tool set up (Carta, Pulley, or AngelList). Must accurately reflect current equity structure before any investment round. Needed for SAFE notes or priced round.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+<div class="audit-item"><div class="audit-num">10.08</div><div>SAFE note template prepared (YC post-money SAFE recommended for pre-seed). Terms: valuation cap, discount, MFN.</div><div class="audit-status st-ns">NOT STARTED</div></div>
+
+<h3>Fundraising Strategy</h3>
+<div class="audit-item"><div class="audit-num">10.09</div><div>Pre-seed raise amount and use-of-funds defined (recommended: $150-300K to cover first production run + initial marketing)</div><div class="audit-status st-ip">IN PROGRESS</div></div>
+<div class="audit-item"><div class="audit-num">10.10</div><div>Fundraising timeline mapped to production timeline (need capital before 120K pouch MOQ commitment)</div><div class="audit-status st-ns">NOT STARTED</div></div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function show(id){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('a')});
+  document.getElementById(id).classList.add('a');
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
+  event.target.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+function filterComp(cat){
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+  event.target.classList.add('active');
+  document.querySelectorAll('.comp-card').forEach(function(c){
+    if(cat==='all'){c.style.display='block';return;}
+    c.style.display=c.dataset.cat===cat?'block':'none';
+  });
+}
+</script>
+</body>
+</html>
